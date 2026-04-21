@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Status Bank</title>
+</head>
+<body>
+
+<h1>Status Bank</h1>
+
+<p id="saldo"></p>
+<p id="divida"></p>
+
+<button onclick="emprestimo()">Fazer Empréstimo</button>
+<button onclick="apostar()">Aposta Simples</button>
+<button onclick="jogoBomba()">Jogo da Bomba 💣</button>
+<button onclick="pagarDivida()">Pagar Dívida</button>
+<button onclick="verDivida()">Ver Dívida</button>
+
+<script>
+let saldo = 10;
+let divida = 0;
+
+function atualizarTela() {
+    document.getElementById("saldo").innerText = "Saldo: " + saldo + " reais";
+    document.getElementById("divida").innerText = "Dívida: " + divida + " reais";
+}
+
+function emprestimo() {
+    let valor = parseInt(prompt("Digite o valor do empréstimo:"));
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Valor inválido!");
+        return;
+    }
+
+    saldo += valor;
+    divida += valor * 2;
+
+    alert("Empréstimo realizado!");
+    atualizarTela();
+}
+
+function pagarDivida() {
+    if (divida <= 0) {
+        alert("Você não tem dívida!");
+        return;
+    }
+
+    let valor = parseInt(prompt("Quanto deseja pagar?"));
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Valor inválido!");
+        return;
+    }
+
+    if (valor > saldo) {
+        alert("Você não tem saldo suficiente!");
+        return;
+    }
+
+    saldo -= valor;
+    divida -= valor;
+
+    if (divida < 0) divida = 0;
+
+    alert("Pagamento realizado!");
+    atualizarTela();
+}
+
+function apostar() {
+    let aposta = parseInt(prompt("Quanto deseja apostar?"));
+
+    if (isNaN(aposta) || aposta <= 0) return;
+    if (aposta > saldo) {
+        alert("Saldo insuficiente!");
+        return;
+    }
+
+    let numero = parseInt(prompt("Escolha um número de 1 a 5:"));
+    let sorteado = Math.floor(Math.random() * 5) + 1;
+
+    alert("Número sorteado: " + sorteado);
+
+    if (numero === sorteado) {
+        saldo += aposta;
+        alert("Você ganhou!");
+    } else {
+        saldo -= aposta;
+        alert("Você perdeu!");
+    }
+
+    atualizarTela();
+}
+
+
+function jogoBomba() {
+    let aposta = parseInt(prompt("Quanto deseja apostar?"));
+
+    if (isNaN(aposta) || aposta <= 0) return;
+    if (aposta > saldo) {
+        alert("Saldo insuficiente!");
+        return;
+    }
+
+    let ganho = aposta;
+    let jogando = true;
+
+    while (jogando) {
+        let escolha = prompt("Escolha um número de 1 a 5 (ou digite 'sair'):");
+
+
+        if (escolha === null || escolha.toLowerCase() === "sair") {
+            saldo += ganho;
+            alert("Você saiu com " + ganho + " de lucro!");
+            break;
+        }
+
+
+        if (escolha.trim() === "" || isNaN(escolha)) {
+            alert("Digite um número válido!");
+            continue;
+        }
+
+        let numero = parseInt(escolha);
+
+        if (numero < 1 || numero > 5) {
+            alert("Escolha entre 1 e 5!");
+            continue;
+        }
+
+        let bomba = Math.floor(Math.random() * 5) + 1;
+
+        if (numero === bomba) {
+            alert("💣 BOMBA! Você perdeu tudo!");
+            saldo -= aposta;
+            jogando = false;
+        } else {
+            ganho += Math.floor(aposta * 0.5);
+            alert("💎 Diamante! Ganho atual: " + ganho);
+        }
+    }
+
+    atualizarTela();
+}
+
+
+function verDivida() {
+    alert("Sua dívida é: " + divida);
+}
+
+atualizarTela();
+</script>
+
+</body>
+</html>
